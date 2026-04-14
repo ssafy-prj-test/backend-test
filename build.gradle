@@ -43,6 +43,18 @@ spotless {
     }
 }
 
+// git hooks(pre-commit 등)를 등록합니다.
+tasks.register('installGitHooks', Copy) {
+    from new File(rootProject.rootDir, 'scripts')
+    into new File(rootProject.rootDir, '.git/hooks')
+}
+
+tasks.configureEach { task ->
+    if (task.name == 'eclipse' || task.name == 'compileJava') {
+        task.dependsOn 'installGitHooks'
+    }
+}
+
 repositories {
 	mavenCentral()
 }
